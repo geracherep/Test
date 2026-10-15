@@ -24,10 +24,32 @@ builder.Services.AddApplication();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+// 3b. SignalR для онлайн-режима «человек-человек»
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<SeaBattle.WebApi.Services.GameConnectionTracker>();
+builder.Services.AddSingleton<SeaBattle.Core.Application.Interfaces.IOnlinePresenceTracker>(sp =>
+    sp.GetRequiredService<SeaBattle.WebApi.Services.GameConnectionTracker>());
+builder.Services.AddScoped<SeaBattle.Core.Application.Interfaces.IGameNotificationService, SeaBattle.WebApi.Services.SignalRGameNotificationService>();
+
 // 4. Настраиваем JWT аутентификацию
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        // SignalR: разрешаем токен в query string (?access_token=...)
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -45,9 +67,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.SetIsOriginAllowed(_ => true) // AllowAnyOrigin + AllowCredentials несовместимы
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -67,6 +90,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<SeaBattle.WebApi.Hubs.GameHub>("/hubs/game");
 
 // Автоматическое создание БД и сидирование админа при старте
 using (var scope = app.Services.CreateScope())

@@ -27,63 +27,75 @@ export default function GamePage() {
   const [aiThinking, setAiThinking] = useState(false);
   const [isShooting, setIsShooting] = useState(false); // <-- НОВОЕ: блокировка двойных кликов
   const isAiProcessing = useRef(false);
+  const stateVersion = useRef(0); // защита от "гонки": устаревшие async-колбэки не должны трогать состояние
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
 
   const load = useCallback(async () => {
     try {
       const s = await gameApi.getState(id);
+      if (!mountedRef.current) return s;
+      stateVersion.current += 1; // любое обновление состояния инвалидирует запланированные ходы ИИ
       setState(s);
+      return s;
     } catch (e) {
-      setError(e.response?.data?.error || 'Ошибка загрузки игры');
+      if (mountedRef.current) setError(e.response?.data?.error || 'Ошибка загрузки игры');
+      return null;
     }
   }, [id]);
 
   useEffect(() => { load(); }, [load]);
+
+  // Общий планировщик авто-хода ИИ с защитой от гонки состояний:
+  // перед выполнением залпа проверяем, что за время таймаута состояние
+  // не изменилось (ход уже сделал игрок/ИИ, игра завершилась и т.п.)
+  const scheduleAiMove = useCallback((expectedVersion) => {
+    isAiProcessing.current = true;
+    setAiThinking(true);
+    const t = setTimeout(async () => {
+      try {
+        // ГОНКА СОСТОЯНИЙ: если за время "раздумий" версия состояния изменилась —
+        // кто-то уже сходил (или пришёл свежий стейт), отменяем этот залп
+        if (!mountedRef.current || stateVersion.current !== expectedVersion) return;
+        await gameApi.aiStep(id);
+        if (!mountedRef.current) return;
+        await load();
+      } catch (e) {
+        // 400/409 означает, что на сервере уже не ход ИИ (состояние ушло вперёд) — штатная ситуация
+        if (e.response?.status !== 400 && e.response?.status !== 409) console.error('AI move error:', e);
+        if (mountedRef.current) await load();
+      } finally {
+        // Если состояние менялось во время нашего запроса, cleanup нового эффекта
+        // или новый цикл планирования сами сбросят флаги — не трогаем их, чтобы
+        // не снять блокировку, установленную более новым запланированным ходом
+        if (mountedRef.current && stateVersion.current === expectedVersion) {
+          setAiThinking(false);
+          isAiProcessing.current = false;
+        }
+      }
+    }, 1000 + Math.random() * 2500);
+    return () => { clearTimeout(t); isAiProcessing.current = false; };
+  }, [id, load]);
 
   // Авто-ход ИИ (ComputerVsComputer)
   useEffect(() => {
     if (!state) return;
     const shouldAiMove = state.mode === 'ComputerVsComputer' && state.status === 'InProgress' && !isAiProcessing.current;
     if (!shouldAiMove) return;
-
-    isAiProcessing.current = true;
-    setAiThinking(true);
-    const t = setTimeout(async () => {
-      try {
-        await gameApi.aiStep(id);
-        await load();
-      } catch (e) {
-        if (e.response?.status !== 400 && e.response?.status !== 409) console.error('AI move error:', e);
-        await load();
-      } finally {
-        setAiThinking(false);
-        isAiProcessing.current = false;
-      }
-    }, 1000 + Math.random() * 2500);
-    return () => { clearTimeout(t); isAiProcessing.current = false; };
-  }, [state, id, load]);
+    return scheduleAiMove(stateVersion.current);
+  }, [state, scheduleAiMove]);
 
   // Авто-ход ИИ (HumanVsComputer)
   useEffect(() => {
     if (!state) return;
     const shouldAiMove = state.mode === 'HumanVsComputer' && state.status === 'InProgress' && state.currentTurn !== state.mySide && !isAiProcessing.current;
     if (!shouldAiMove) return;
-
-    isAiProcessing.current = true;
-    setAiThinking(true);
-    const t = setTimeout(async () => {
-      try {
-        await gameApi.aiStep(id);
-        await load();
-      } catch (e) {
-        if (e.response?.status !== 400 && e.response?.status !== 409) console.error('AI move error:', e);
-        await load();
-      } finally {
-        setAiThinking(false);
-        isAiProcessing.current = false;
-      }
-    }, 1000 + Math.random() * 2500);
-    return () => { clearTimeout(t); isAiProcessing.current = false; };
-  }, [state, id, load]);
+    return scheduleAiMove(stateVersion.current);
+  }, [state, scheduleAiMove]);
 
   const myGrid = emptyGrid();
   if (state) {

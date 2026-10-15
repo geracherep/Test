@@ -12,11 +12,16 @@ public class MoveService : IMoveService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IAiStrategyFactory _aiFactory;
+    private readonly IGameNotificationService? _notifications;
 
-    public MoveService(IUnitOfWork unitOfWork, IAiStrategyFactory aiFactory)
+    public MoveService(
+        IUnitOfWork unitOfWork,
+        IAiStrategyFactory aiFactory,
+        IGameNotificationService? notifications = null)
     {
         _unitOfWork = unitOfWork;
         _aiFactory = aiFactory;
+        _notifications = notifications;
     }
 
     public async Task<MoveResultDto> MakeMoveAsync(Guid gameId, Guid userId, MakeMoveRequest request)
@@ -27,11 +32,17 @@ public class MoveService : IMoveService
         var player = game.Players.FirstOrDefault(p => p.UserId == userId) 
             ?? throw new DomainException("Игрок не найден в игре");
             
+        if (game.Status == GameStatus.Paused)
+            throw new GameNotActiveException("Игра на паузе");
+        if (game.Mode == GameMode.HumanVsHuman && game.CurrentTurn != player.Side)
+            throw new NotYourMoveException("В PvP-режиме ход переходит к сопернику после каждого выстрела");
         if (game.CurrentTurn != player.Side)
             throw new NotYourMoveException();
 
-        var result = await ProcessShotAsync(game, player.Side, request.Row, request.Column);
-        
+        // ВАЖНО: добавляем ход в контекст ДО ProcessShotAsync, чтобы авто-промахи
+        // вокруг потопленного корабля видели этот выстрел как уже существующий.
+        // Результат проставим после обработки; если выстрел невалидный ("Сюда уже стреляли"),
+        // откатываем сущность из контекста, чтобы не осталось "висячего" Added-хода
         var move = new Move
         {
             Id = Guid.NewGuid(), 
@@ -39,10 +50,22 @@ public class MoveService : IMoveService
             PlayerSide = player.Side,
             Row = request.Row, 
             Column = request.Column, 
-            Result = result, 
+            Result = MoveResult.Hit, // уточним ниже после обработки выстрела
             CreatedAt = DateTime.UtcNow
         };
         await _unitOfWork.Moves.AddAsync(move);
+
+        MoveResult result;
+        try
+        {
+            result = await ProcessShotAsync(game, player.Side, request.Row, request.Column);
+        }
+        catch
+        {
+            _unitOfWork.DetachEntity(move); // убираем незавершённый ход из ChangeTracker
+            throw;
+        }
+        move.Result = result;
 
         if (result == MoveResult.Miss)
             game.CurrentTurn = player.Side == PlayerSide.Player1 ? PlayerSide.Player2 : PlayerSide.Player1;
@@ -58,7 +81,10 @@ public class MoveService : IMoveService
 
         await _unitOfWork.SaveChangesAsync();
 
-        return new MoveResultDto(result, request.Row, request.Column, isFinished, game.Winner);
+        var dto = new MoveResultDto(result, request.Row, request.Column, isFinished, game.Winner);
+        await NotifyMoveAsync(game, player.Side, dto);
+
+        return dto;
     }
 
     public async Task<MoveResultDto> MakeAiMoveAsync(Guid gameId)
@@ -73,8 +99,8 @@ public class MoveService : IMoveService
         var strategy = _aiFactory.GetStrategy(aiPlayer.AiStrategy ?? AiStrategyType.Random);
         
         var shot = strategy.ChooseShot(game, aiPlayer.Side);
-        var result = await ProcessShotAsync(game, aiPlayer.Side, shot.Row, shot.Column);
 
+        // ВАЖНО: добавляем ход в контекст ДО ProcessShotAsync (см. MakeMoveAsync)
         var move = new Move
         {
             Id = Guid.NewGuid(), 
@@ -82,10 +108,22 @@ public class MoveService : IMoveService
             PlayerSide = aiPlayer.Side,
             Row = shot.Row, 
             Column = shot.Column, 
-            Result = result, 
+            Result = MoveResult.Hit, // уточним ниже после обработки выстрела
             CreatedAt = DateTime.UtcNow
         };
         await _unitOfWork.Moves.AddAsync(move);
+
+        MoveResult result;
+        try
+        {
+            result = await ProcessShotAsync(game, aiPlayer.Side, shot.Row, shot.Column);
+        }
+        catch
+        {
+            _unitOfWork.DetachEntity(move); // убираем незавершённый ход из ChangeTracker
+            throw;
+        }
+        move.Result = result;
 
         if (result == MoveResult.Miss)
             game.CurrentTurn = aiPlayer.Side == PlayerSide.Player1 ? PlayerSide.Player2 : PlayerSide.Player1;
@@ -101,7 +139,10 @@ public class MoveService : IMoveService
 
         await _unitOfWork.SaveChangesAsync();
 
-        return new MoveResultDto(result, shot.Row, shot.Column, isFinished, game.Winner);
+        var dto = new MoveResultDto(result, shot.Row, shot.Column, isFinished, game.Winner);
+        await NotifyMoveAsync(game, aiPlayer.Side, dto);
+
+        return dto;
     }
 
     private async Task<MoveResult> ProcessShotAsync(Game game, PlayerSide shooterSide, int row, int col)
@@ -133,11 +174,20 @@ public class MoveService : IMoveService
 
     private async Task MarkSurroundingCellsAsync(Guid gameId, PlayerSide shooterSide, Ship sunkShip)
     {
-        // 1. Загружаем ВСЕ существующие ходы из БД один раз
+        // 1. Координаты самого потопленного корабля — вокруг них не ставим промахи внутрь корпуса
+        var shipCoords = new HashSet<string>(sunkShip.Cells.Select(c => $"{c.Row},{c.Column}"));
+
+        // 2. Существующие ходы: и сохранённые в БД, и уже добавленные в контекст EF Core,
+        //    но ещё не сохранённые (Local). Без Local мы бы не увидели текущий выстрел
+        //    и другие авто-промахи из предыдущих потоплений в рамках одного SaveChanges,
+        //    что и приводило к "UNIQUE constraint failed: Moves".
+        var trackedMoves = _unitOfWork.GetTrackedNewMoves(gameId, shooterSide);
         var existingMoves = await _unitOfWork.Moves.FindAsync(m => m.GameId == gameId && m.PlayerSide == shooterSide);
-        
-        // 2. Создаём HashSet для мгновенной проверки (и из БД, и из тех, что мы добавим в этом цикле)
-        var processedCoords = new HashSet<string>(existingMoves.Select(m => $"{m.Row},{m.Column}"));
+
+        var processedCoords = new HashSet<string>(
+            existingMoves
+                .Concat(trackedMoves)
+                .Select(m => $"{m.Row},{m.Column}"));
 
         foreach (var cell in sunkShip.Cells)
         {
@@ -149,28 +199,47 @@ public class MoveService : IMoveService
                     if (nr >= 0 && nr < 10 && nc >= 0 && nc < 10)
                     {
                         string coord = $"{nr},{nc}";
-                        
-                        // Проверяем: если клетки ещё нет ни в БД, ни в списке добавленных в этом цикле
-                        if (!processedCoords.Contains(coord))
+
+                        // Пропускаем клетки самого корабля и всё, по чему уже стреляли
+                        if (shipCoords.Contains(coord)) continue;
+                        if (processedCoords.Contains(coord)) continue;
+
+                        await _unitOfWork.Moves.AddAsync(new Move
                         {
-                            await _unitOfWork.Moves.AddAsync(new Move
-                            {
-                                Id = Guid.NewGuid(), 
-                                GameId = gameId, 
-                                PlayerSide = shooterSide,
-                                Row = nr, 
-                                Column = nc, 
-                                Result = MoveResult.Miss, 
-                                CreatedAt = DateTime.UtcNow
-                            });
-                            
-                            // Сразу добавляем в HashSet, чтобы при проверке следующей палубы того же корабля 
-                            // эта клетка уже считалась обработанной!
-                            processedCoords.Add(coord);
-                        }
+                            Id = Guid.NewGuid(), 
+                            GameId = gameId, 
+                            PlayerSide = shooterSide,
+                            Row = nr, 
+                            Column = nc, 
+                            Result = MoveResult.Miss, 
+                            CreatedAt = DateTime.UtcNow
+                        });
+
+                        // Сразу помечаем координату обработанной, чтобы следующий залп
+                        // того же или другого потопления в этой транзакции не создал дубликат
+                        processedCoords.Add(coord);
                     }
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Рассылка событий онлайн-режима после успешного сохранения хода.
+    /// Ошибки рассылки не должны ломать игровой процесс — только логируются вызывающим кодом.
+    /// </summary>
+    private async Task NotifyMoveAsync(Game game, PlayerSide shooterSide, MoveResultDto dto)
+    {
+        if (_notifications == null || game.Mode == GameMode.ComputerVsComputer) return;
+
+        try
+        {
+            await _notifications.NotifyShotAsync(game.Id, dto, shooterSide);
+            await _notifications.PushStatesAsync(game);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[MoveService] Не удалось отправить SignalR-событие: {ex.Message}");
         }
     }
 

@@ -1,6 +1,7 @@
-﻿namespace SeaBattle.Core.Domain.Exceptions;
+namespace SeaBattle.Core.Domain.Exceptions;
 
 public class GameNotActiveException : DomainException
 {
     public GameNotActiveException() : base("Игра не активна") { }
+    public GameNotActiveException(string message) : base(message) { }
 }

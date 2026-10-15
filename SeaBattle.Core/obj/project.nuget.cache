@@ -1,13 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "qhL2b0jO384=",
+  "dgSpecHash": "auRFVrDa1JI=",
   "success": true,
-  "projectFilePath": "D:\\SeaBattle\\SeaBattle.Core\\SeaBattle.Core.csproj",
+  "projectFilePath": "/workspace/SeaBattle.Core/SeaBattle.Core.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\georg\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.12\\microsoft.extensions.dependencyinjection.abstractions.10.0.12.nupkg.sha512",
-    "C:\\Users\\georg\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.22\\microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512",
-    "C:\\Users\\georg\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.22\\microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
-    "C:\\Users\\georg\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.22\\microsoft.windowsdesktop.app.ref.8.0.22.nupkg.sha512"
+    "/root/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.12/microsoft.extensions.dependencyinjection.abstractions.10.0.12.nupkg.sha512"
   ],
   "logs": []
 }
