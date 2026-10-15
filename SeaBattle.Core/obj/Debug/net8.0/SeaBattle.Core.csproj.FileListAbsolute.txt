@@ -1,0 +1,12 @@
+D:\SeaBattle\SeaBattle.Core\bin\Debug\net8.0\SeaBattle.Core.deps.json
+D:\SeaBattle\SeaBattle.Core\bin\Debug\net8.0\SeaBattle.Core.dll
+D:\SeaBattle\SeaBattle.Core\bin\Debug\net8.0\SeaBattle.Core.pdb
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\SeaBattle.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\SeaBattle.Core.AssemblyInfoInputs.cache
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\SeaBattle.Core.AssemblyInfo.cs
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\SeaBattle.Core.csproj.CoreCompileInputs.cache
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\SeaBattle.Core.dll
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\refint\SeaBattle.Core.dll
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\SeaBattle.Core.pdb
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\ref\SeaBattle.Core.dll
+D:\SeaBattle\SeaBattle.Core\obj\Debug\net8.0\SeaBattle.Core.csproj.AssemblyReference.cache

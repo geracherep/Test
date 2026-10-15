@@ -1,0 +1,13 @@
+﻿.toggle {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background-color: var(--bg-tertiary);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+.toggle:hover { transform: rotate(20deg) scale(1.1); }

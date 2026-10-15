@@ -1,0 +1,13 @@
+﻿.wrapper { display: flex; flex-direction: column; gap: 0.3rem; width: 100%; }
+.label { font-size: 0.85rem; color: var(--text-secondary); }
+.input {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.input:focus { border-color: var(--accent); }

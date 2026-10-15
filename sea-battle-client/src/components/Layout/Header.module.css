@@ -1,0 +1,23 @@
+﻿.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.logo { font-size: 1.3rem; font-weight: 700; cursor: pointer; }
+.right { display: flex; align-items: center; gap: 1rem; }
+.username { color: var(--text-secondary); font-weight: 600; cursor: pointer; }
+.logout {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--danger);
+  font-weight: 600;
+  cursor: pointer;
+}
+.logout:hover { background-color: var(--danger); color: #ffffff; }
+

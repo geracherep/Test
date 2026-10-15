@@ -1,0 +1,17 @@
+D:\SeaBattle\SeaBattle.Persistence\bin\Debug\net8.0\SeaBattle.Persistence.deps.json
+D:\SeaBattle\SeaBattle.Persistence\bin\Debug\net8.0\SeaBattle.Persistence.runtimeconfig.json
+D:\SeaBattle\SeaBattle.Persistence\bin\Debug\net8.0\SeaBattle.Persistence.dll
+D:\SeaBattle\SeaBattle.Persistence\bin\Debug\net8.0\SeaBattle.Persistence.pdb
+D:\SeaBattle\SeaBattle.Persistence\bin\Debug\net8.0\SeaBattle.Core.dll
+D:\SeaBattle\SeaBattle.Persistence\bin\Debug\net8.0\SeaBattle.Core.pdb
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.csproj.AssemblyReference.cache
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.GeneratedMSBuildEditorConfig.editorconfig
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.AssemblyInfoInputs.cache
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.AssemblyInfo.cs
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.csproj.CoreCompileInputs.cache
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattl.65D64A23.Up2Date
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.dll
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\refint\SeaBattle.Persistence.dll
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.pdb
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\SeaBattle.Persistence.genruntimeconfig.cache
+D:\SeaBattle\SeaBattle.Persistence\obj\Debug\net8.0\ref\SeaBattle.Persistence.dll

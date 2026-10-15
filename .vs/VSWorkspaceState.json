@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\SeaBattle.Core\\Application",
+    "\\SeaBattle.Core\\Domain\\Entities",
+    "\\SeaBattle.WebApi"
+  ],
+  "SelectedNode": "\\SeaBattle.WebApi\\Middleware",
+  "PreviewInSolutionExplorer": false
+}
