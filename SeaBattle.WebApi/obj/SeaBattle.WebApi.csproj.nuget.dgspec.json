@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SeaBattle\\SeaBattle.WebApi\\SeaBattle.WebApi.csproj": {}
+    "/workspace/SeaBattle.WebApi/SeaBattle.WebApi.csproj": {}
   },
   "projects": {
-    "D:\\SeaBattle\\SeaBattle.Core\\SeaBattle.Core.csproj": {
+    "/workspace/SeaBattle.Core/SeaBattle.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SeaBattle\\SeaBattle.Core\\SeaBattle.Core.csproj",
+        "projectUniqueName": "/workspace/SeaBattle.Core/SeaBattle.Core.csproj",
         "projectName": "SeaBattle.Core",
-        "projectPath": "D:\\SeaBattle\\SeaBattle.Core\\SeaBattle.Core.csproj",
-        "packagesPath": "C:\\Users\\georg\\.nuget\\packages\\",
-        "outputPath": "D:\\SeaBattle\\SeaBattle.Core\\obj\\",
+        "projectPath": "/workspace/SeaBattle.Core/SeaBattle.Core.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/workspace/SeaBattle.Core/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\georg\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,8 +37,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -66,59 +59,39 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/dotnet/sdk/8.0.426/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\SeaBattle\\SeaBattle.Persistence\\SeaBattle.Persistence.csproj": {
+    "/workspace/SeaBattle.Persistence/SeaBattle.Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SeaBattle\\SeaBattle.Persistence\\SeaBattle.Persistence.csproj",
+        "projectUniqueName": "/workspace/SeaBattle.Persistence/SeaBattle.Persistence.csproj",
         "projectName": "SeaBattle.Persistence",
-        "projectPath": "D:\\SeaBattle\\SeaBattle.Persistence\\SeaBattle.Persistence.csproj",
-        "packagesPath": "C:\\Users\\georg\\.nuget\\packages\\",
-        "outputPath": "D:\\SeaBattle\\SeaBattle.Persistence\\obj\\",
+        "projectPath": "/workspace/SeaBattle.Persistence/SeaBattle.Persistence.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/workspace/SeaBattle.Persistence/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\georg\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\SeaBattle\\SeaBattle.Core\\SeaBattle.Core.csproj": {
-                "projectPath": "D:\\SeaBattle\\SeaBattle.Core\\SeaBattle.Core.csproj"
+              "/workspace/SeaBattle.Core/SeaBattle.Core.csproj": {
+                "projectPath": "/workspace/SeaBattle.Core/SeaBattle.Core.csproj"
               }
             }
           }
@@ -132,8 +105,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -175,59 +147,39 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/dotnet/sdk/8.0.426/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\SeaBattle\\SeaBattle.WebApi\\SeaBattle.WebApi.csproj": {
+    "/workspace/SeaBattle.WebApi/SeaBattle.WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SeaBattle\\SeaBattle.WebApi\\SeaBattle.WebApi.csproj",
+        "projectUniqueName": "/workspace/SeaBattle.WebApi/SeaBattle.WebApi.csproj",
         "projectName": "SeaBattle.WebApi",
-        "projectPath": "D:\\SeaBattle\\SeaBattle.WebApi\\SeaBattle.WebApi.csproj",
-        "packagesPath": "C:\\Users\\georg\\.nuget\\packages\\",
-        "outputPath": "D:\\SeaBattle\\SeaBattle.WebApi\\obj\\",
+        "projectPath": "/workspace/SeaBattle.WebApi/SeaBattle.WebApi.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/workspace/SeaBattle.WebApi/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\georg\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\SeaBattle\\SeaBattle.Persistence\\SeaBattle.Persistence.csproj": {
-                "projectPath": "D:\\SeaBattle\\SeaBattle.Persistence\\SeaBattle.Persistence.csproj"
+              "/workspace/SeaBattle.Persistence/SeaBattle.Persistence.csproj": {
+                "projectPath": "/workspace/SeaBattle.Persistence/SeaBattle.Persistence.csproj"
               }
             }
           }
@@ -241,8 +193,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -255,10 +206,6 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.0, )"
-            },
-            "Microsoft.AspNetCore.SignalR": {
-              "target": "Package",
-              "version": "[1.1.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -286,24 +233,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.22, 8.0.22]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -312,7 +241,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/dotnet/sdk/8.0.426/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

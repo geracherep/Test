@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SeaBattle.Core.Application.DTOs.Game;
 using SeaBattle.Core.Application.Interfaces;

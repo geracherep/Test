@@ -1,6 +1,6 @@
-".vs/" 
-"*.zip" 
-"bin/" 
-"obj/" 
-"*.user" 
-"*.suo" 
+[Bb]in/
+[Oo]bj/
+*.cache
+*.editorconfig
+.vscode/
+.idea/
